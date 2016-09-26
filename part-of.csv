@@ -1,0 +1,392 @@
+male worker,margin
+male worker,line
+leg,middle
+abdomen,segment
+abdomen,groove
+abdomen,basal segment
+segment,band
+abdomen,base
+abdomen,upper margin
+abdomen,groove
+abdomen,basal segment
+abdomen,tip
+abdomen,node
+annulus,outer surface
+annulus,surface
+annulus,lower surface
+annulus,terminal element
+annulus,element
+annulus,groove
+annulus,upper surface
+annulus,margin
+annulus,section
+annulus,inner side
+annulus,upper side
+annulus,scale
+apical pore,spot
+apical spine,base
+array,head
+basidium,apex
+basidium,sterigmatum
+basidium,content
+blade,face
+blade,margin
+blade,side
+blade,base
+blade,apex
+branch,leaflet
+branch,tip
+cheilocystidium,septum
+cheilocystidium,content
+cheilocystidium,terminal element
+cheilocystidium,element
+cheilocystidium,anteterminal
+cheilocystidium,base
+cheilocystidium,ante-terminal
+cheilocystidium,ante-terminal element
+cheilocystidium,anteterminal element
+cheilocystidium,apical protuberance
+clypeus,middle
+clypeus,base
+clypeus,anterior margin
+clypeus,notch
+clypeus,anterior part
+cortical layer,context
+cotyledon,tip
+cypsela,body
+cypsela,face
+cypsela,edge
+dilated portion,transverse groove
+dilated portion,groove
+disk,lateral margin
+disk,groove
+disk,transverse groove
+element,end
+element,apex
+element,end
+face,cavity
+face,cheek
+face,lower part
+face,part
+face,anterior margin
+face,groove
+face,side
+face,oil cavity
+face,cavity
+feather,portion
+female-cone,end
+head,eye
+head,antenna
+head,maxillary palpus
+head,labial palpus
+head,angle
+head,middle
+head,side
+head,face
+head,clypeus
+head,portion
+head,anterior portion
+head,mandible
+head,anterior margin
+head,clypeus
+head,rest
+head,groove
+hypha,hyphal cell
+hypha,cell
+hypha,pileipellis
+hypha,layer
+junction,context
+labrum,anterior margin
+lamella,edge
+lamella,side
+lamina,base
+lateral spine,base
+leaf,apex
+leaf,leaflet
+leaf,rhachi
+leaf,rachi
+leaf,blade
+leaf,petiole
+leaf,face
+leaf,section
+leaf,margin
+leaf,upper side
+leaf,lower side
+leaf,cross-section
+leaf,head
+leaf crown,center
+leaflet,section
+leaflet,base
+leaflet,vein
+leaflet,epidermal-cell
+leaflet,upper margin
+leaflet,base
+leaflet,midrib
+leaflet,vein
+leaflet,surface
+leaflet,stomato
+leaflet,adaxial side
+leaflet,side
+leg,base
+leg,apex
+lower surface,margin
+surface,margin
+lower surface,lower rim
+lower surface,cylindrical element
+lower surface,fusiform element
+lamellar,edge
+neuration,cell
+macrobasidium,content
+mandible,notch
+mandible,apex
+mandible,outer apex
+mandible,base
+mandible,outer margin
+mandible,edge
+mandible,face
+mandible,line
+mandible,inner edge
+mandible,inner margin
+mandible,middle
+mandible,margin
+mandible,tip
+marginal zone,background
+median leaflet,margin
+median leaflet,apex
+median leaflet,base
+median leaflet,midrib
+mesothorax,base
+mesothorax,apex
+mesothorax,centre
+mesothorax,line
+metathorax,posterior angle
+metathorax,behind
+metathorax,truncation
+metathorax,verge
+metathorax,superior surface
+metathorax,lateral angle
+metathorax,spine
+microsporophyll,apex
+microsporophyll,tip
+node,apex
+node,pointed end
+node,end
+node,upper surface
+outer rectrix,tip
+outer web,edge
+part,division
+peduncle,scale
+peduncle,node
+peduncle,face
+peduncle,anterior face
+petiole,node
+petiole,groove
+petiole,upper side
+petiole,lower side
+petiole,prickle
+phyllary,midvein
+phyllary,zone
+phyllary,apex
+phyllary,tissue
+phyllary,midnerve
+phyllary,margin
+phyllary,body
+phyllary,mid body
+phyllary,abaxial face
+phyllary,face
+phyllary,outer abaxial face
+phyllary,inner
+phyllary,outer apex
+phyllary,tip
+phyllary,apical zone
+phyllary,band
+pileipellis,apex
+pileipellis,element
+pileipellis,terminal element
+pileus,margin
+pileus,upper margin
+corolla,portion
+pileus,middle
+pileus,surface
+pileus,fibril
+pileus,discal area
+pileus,area
+pileus,centre
+pileus,marginal area
+pileus,disc
+pileus,marginal band
+pileus,margin
+pileus,discal zone
+pileus,band
+pileus,base
+pileus,marginal belt
+pileus,flesh
+pileus,junction
+pileus,context
+pileus,outer part
+pileus,inner portion
+pileus,stain
+pileus,scale
+pileus,remnant
+pileus,universal veil
+pileus,veil
+pileus,veil remnant
+pileus,zone
+pileus,marginal zone
+pileus,peri-marginal zone
+pileus,hypha
+pileus,trama
+pileus,background
+plant,base
+pleurocystidium,content
+rectrix,outer rectrix
+rectrix,margin
+rectrix,basal half
+region,adaxial surface
+region,abaxial surface
+rhachi,edge
+rhizome,end
+scale,margin
+scale,front
+scale,behind
+scale,margin
+scale,notch
+tail,notch
+margin,notch
+notch,angle
+scale,upper margin
+scale,middle
+seed,sarcotestum
+seed,layer
+seed,outer layer
+seed-cone,apex
+segment,apical margin
+spore,hilar appendix
+spore,content
+spore,apex
+spore,apical pore
+spore,pore
+spore,external layer
+spore,gern pore
+spore,wall
+sporophylls,apical protuberance
+spot,apex
+spot,layer
+stem,bark
+stem,band
+stem,apex
+stem,base
+stem,zone
+stem,apex
+stigmatic portion,side
+stipe,base
+stipe,part
+stipe,lower part
+stipe,middle part
+stipe,band
+stipe,transversal belt
+stipe,belt
+stipe,cortical layer
+stipe,junction
+stipe,zone
+stipe,area
+style,base
+style,apex
+style,appendage
+style,line
+subopake,flagellum
+subopake,tarsus
+subopake,clypeus
+subopake,mandible
+subopake,femora
+subopake,coxa
+subopake,abdomen
+subopake,head
+subopake,thorax
+subopake,mesothorax
+surface,discal area
+margin,portion
+surface,area
+tail,rectrix
+tarsus,apical joint
+terminal element,tip
+terminal element,end
+thorax,transverse groove
+thorax,groove
+thorax,side
+thorax,spine
+thorax,front
+thorax,tooth
+thorax,anterior angle
+thorax,part
+thorax,posterior portion
+thorax,lateral margin
+thorax,anterior portion
+thorax,portion
+thorax,superior surface
+thorax,dilated portion
+tramum,lateral stratum
+upper stipe,cortical layer
+volva,upper portion
+wing,submarginal cell
+wing,apex
+wing,discoidal cell
+wing,externo-medial nervure
+wing,nervure
+wing,marginal cell
+wing,secondary
+wing,upper surface
+wing,submarginal cell
+wing,apex
+wing,discoidal cell
+wing,externo-medial nervure
+wing,surface
+wing,nervure
+wing,marginal cell
+wing,cell
+vertex,margin
+vertex,posterior margin
+surface,crack
+surface,layer
+surface,subcuticular layer
+upper margin,edge
+surface,element
+lower surface,element
+soil,surface
+sporophyll,end
+sporophyll,protuberance
+stipe,layer
+margin,line
+secondary,basal section
+secondary,section
+leg,lower section
+leg,section
+rump,side
+pileus margin,inner side
+margin,side
+margin,inner side
+pileus margin,side
+stem,side
+rhizome,surface
+microsporophyll,region
+terminal element,tip
+megasporophyll,zone
+microsporophyll,zone
+segment,groove
+basal segment,groove
+segment,margin
+face,margin
+hilar,appendix
+face ,anterior margin
+face,central protuberance
+central protuberance,side
+cloacal,protuberance
+segment,base
+segment,side
+region,surface
+region,adaxial and abaxial surface
+band,margin
+cell,apex
+element,tip
+element,end
+side,groove
