@@ -17,12 +17,12 @@ import edu.arizona.biosemantics.semanticmarkup.enhance.know.KnowsSynonyms.Synony
 
 public abstract class RemoveNonSpecificBiologicalEntities extends AbstractTransformer {
 	
-	private String nonSpecificParts = "apex|appendix|area|band|base|belt|body|cavity|cell|center|centre|chamber|component|content|crack|edge|element|end|"
+	private static String nonSpecificParts = "apex|appendix|area|band|base|belt|body|cavity|cell|center|centre|chamber|component|content|crack|edge|element|end|"
 			+ "face|groove|layer|line|margin|middle|notch|part|pore|portion|protuberance|remnant|section|"
 			+ "side|stratum|surface|tip|wall|zone";
-	protected KnowsPartOf knowsPartOf;
-	protected ITokenizer tokenizer;
-	protected KnowsSynonyms knowsSynonyms;
+	protected static KnowsPartOf knowsPartOf;
+	protected static ITokenizer tokenizer;
+	protected static KnowsSynonyms knowsSynonyms;
 	protected ParenthesisRemover parenthesisRemover = new ParenthesisRemover();
 	
 	public RemoveNonSpecificBiologicalEntities(KnowsPartOf knowsPartOf, KnowsSynonyms knowsSynonyms, ITokenizer tokenizer) {
@@ -31,7 +31,7 @@ public abstract class RemoveNonSpecificBiologicalEntities extends AbstractTransf
 		this.tokenizer = tokenizer;
 	}
 		
-	protected boolean isNonSpecificPart(String name) {
+	public static boolean isNonSpecificPart(String name) {
 		Set<SynonymSet> synonymSets =  knowsSynonyms.getSynonyms(name);
 		for(SynonymSet synonymSet : synonymSets) {
 			if(synonymSet.getPreferredTerm().matches(nonSpecificParts)) {
@@ -41,7 +41,7 @@ public abstract class RemoveNonSpecificBiologicalEntities extends AbstractTransf
 		return false;
 	}
 
-	protected boolean isPartOfAConstraint(String part, String constraint) {
+	public static boolean isPartOfAConstraint(String part, String constraint) {
 		for(String constraintPartition : getAllPartitions(constraint)) {
 			if(knowsPartOf.isPartOf(part, constraintPartition)) {
 				return true;
@@ -50,7 +50,7 @@ public abstract class RemoveNonSpecificBiologicalEntities extends AbstractTransf
 		return false;
 	}
 	
-	private List<String> getAllPartitions(String constraint) {	
+	public static List<String> getAllPartitions(String constraint) {	
 		List<String> result = new LinkedList<String>();
 		List<Token> tokens = tokenizer.tokenize(constraint); 
 		List<Token> remainingTokens = new LinkedList<Token>(tokens);
@@ -61,7 +61,7 @@ public abstract class RemoveNonSpecificBiologicalEntities extends AbstractTransf
 		return result;
 	}
 
-	private Collection<? extends String> getPartitionsStartingWithFirst(List<Token> tokens) {
+	private static Collection<? extends String> getPartitionsStartingWithFirst(List<Token> tokens) {
 		List<String> result = new LinkedList<String>();
 		for(int i=1; i<=tokens.size(); i++) {
 			String partition = "";
@@ -94,5 +94,6 @@ public abstract class RemoveNonSpecificBiologicalEntities extends AbstractTransf
 		}
 		return null;
 	}
+	
 
 }

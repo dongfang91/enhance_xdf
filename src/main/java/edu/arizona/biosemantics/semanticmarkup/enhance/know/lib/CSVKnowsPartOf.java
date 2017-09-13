@@ -59,7 +59,7 @@ public class CSVKnowsPartOf implements KnowsPartOf {
 		//only temporary for evaluation: inflector doesnt create correct singular for e.g. 'area', 'cypsela'
 		if(!lastPartPart.endsWith("a") && !lastPartPart.endsWith("i")) 
 			lastPartPart = inflector.getSingular(lastPartPart).replaceAll("_", " ");
-		if(!lastParentPart.endsWith("a") && !lastParentPart.endsWith("i"))
+		if(!lastParentPart.endsWith("a") && !lastParentPart.endsWith("i")&&!lastParentPart.endsWith("s"))
 			lastParentPart = inflector.getSingular(lastParentPart).replaceAll("_", " ");
 		
 		partParts[partParts.length - 1] = lastPartPart;

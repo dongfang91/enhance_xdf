@@ -1,5 +1,6 @@
 package edu.arizona.biosemantics.semanticmarkup.enhance.transform;
 
+import java.util.List;
 import java.util.Set;
 
 import org.jdom2.Document;
@@ -17,18 +18,17 @@ public class SimpleRemoveSynonyms extends AbstractTransformer {
 	}
 	
 	@Override
-	public void transform(Document document) {
-		removeBiologicalEntitySynonyms(document);
+	public void transformAll(Element statement, Element biologicalEntity,List<Element>context) {
+		removeBiologicalEntitySynonyms(biologicalEntity);
 	}
 
-	private void removeBiologicalEntitySynonyms(Document document) {
-		for (Element biologicalEntity : this.biologicalEntityPath.evaluate(document)) {
+	private void removeBiologicalEntitySynonyms(Element biologicalEntity) {
+		
 			String name = biologicalEntity.getAttributeValue("name");
 			if(name != null) {
 				String newName = createSynonymReplacedValue(name);
 				biologicalEntity.setAttribute("name", newName);
 			}
-		}
 	}
 
 	private String createSynonymReplacedValue(String name) {
@@ -39,5 +39,15 @@ public class SimpleRemoveSynonyms extends AbstractTransformer {
 			return synonymSets.iterator().next().getPreferredTerm();
 		}
 	}
+
+	@Override
+	public boolean transform(List<AbstractTransformer> transformers,Element statement, Element biologicalEntity,
+			List<Element> context, List<Element> wholeStatement) {
+				return false;
+		// TODO Auto-generated method stub
+		
+	}
+
+
 
 }

@@ -19,6 +19,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.jdom2.Document;
+import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
@@ -97,7 +98,7 @@ import edu.arizona.biosemantics.semanticmarkup.enhance.transform.old.Standardize
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.process.PTBTokenizer;
 
-public class Run {
+public class Run extends AbstractTransformer{
 
 	private SAXBuilder saxBuilder = new SAXBuilder();
 	private List<AbstractTransformer> transformers = new LinkedList<AbstractTransformer>();
@@ -117,12 +118,23 @@ public class Run {
 					log(LogLevel.ERROR, "Can't read xml from file " + file.getAbsolutePath(), e);
 				}
 				
-				if(document != null) 
-					for(AbstractTransformer transformer : transformers) {
-						transformer.transform(document);
-					    System.out.println("-------------------------------------------------------------------");
+				if(document != null){
+ 					for (Element description : this.descriptionXpath.evaluate(document)){
+						List<Element> wholeStatements = new LinkedList<Element>();
+						for(Element statement : description.getChildren("statement")) {
+							wholeStatements.add(statement);
+							for(Element biologicalEntity : statement.getChildren("biological_entity")) {
+								transformers.get(0).transformAll(statement, biologicalEntity, wholeStatements);
+							}
+						}
+						if(wholeStatements.size()==0) return;
+						for(Element statement : description.getChildren("statement")) {
+							for(Element biologicalEntity : statement.getChildren("biological_entity")) {
+								runTransformer(transformers.subList(1,transformers.size() ), statement,biologicalEntity , wholeStatements);
+							}
+						}	
 					}
-				
+				}
 				File outputFile = new File(outputDirectory, file.getName());
 				try {
 					outputFile.getParentFile().mkdirs();
@@ -144,6 +156,74 @@ public class Run {
 		this.transformers.add(transformer);
 	}
 	
+	public boolean runTransformer(List<AbstractTransformer> transformers,Element statement, Element biologicalEntity,List<Element> wholeStatements){
+		
+		if(biologicalEntity.getAttributeValue("id").equals("o344"))
+     		System.out.println("asdadwfsaf");
+		List<Element> context = new LinkedList<Element>();
+		context = getContext(statement, wholeStatements);
+
+		String name = biologicalEntity.getAttributeValue("name");
+		name = name == null ? "" : name.trim();
+		String constraint = biologicalEntity.getAttributeValue("constraint");
+		constraint = constraint == null ? "" : constraint.trim();
+		String inferredConstraint = biologicalEntity.getAttributeValue("inferred_constraint");
+		inferredConstraint = inferredConstraint == null ? "" : inferredConstraint.trim();
+		if(RemoveNonSpecificBiologicalEntities.isNonSpecificPart(name)&&inferredConstraint.equals("")) {
+			if(!RemoveNonSpecificBiologicalEntities.isPartOfAConstraint(name, constraint)) {
+				for(AbstractTransformer transformer : transformers) {
+					System.out.println("-------------------------------------------------------------------");
+		            if(transformer.transform(transformers,statement, biologicalEntity, context,wholeStatements))
+		            	return true;
+		        }
+			}
+		}
+		return false;
+	}
+	
+	private List<Element> getContext(Element statement,
+			List<Element> wholeStatements) {
+		List<Element> context = new LinkedList<Element>();
+		List<Element> forwardContext = new LinkedList<Element>();
+		List<Element> backwardContext = new LinkedList<Element>();
+		int index = wholeStatements.indexOf(statement);
+		int total = wholeStatements.size();
+		int i =1;
+		while (index-i>=0&&i<=3){
+			forwardContext.add(wholeStatements.get(index-i));
+			i++;
+		}
+//		while (index+i<total&&i<=3){
+//			backwardContext.add(wholeStatements.get(index+i));
+//			i++;
+//		}
+		context.add(statement);
+		context.addAll(forwardContext);
+//		context.addAll( backwardContext);
+		
+		
+		//another way to get context
+//		if(forwardContext.size()<=2){
+//			context.addAll(forwardContext);
+//			context.addAll(backwardContext);
+//		}
+//		
+//		else {
+//			context.add(forwardContext.get(0));
+//			context.add(forwardContext.get(1));
+//			context.addAll(backwardContext);
+//			context.add(forwardContext.get(2));
+//		}
+	    return context;	
+		
+	}
+		
+		
+		
+		
+	
+	
+
 	public static void main(String[] args) throws IOException {
 		/*for (String arg : args) {
 		      // option #1: By sentence.
@@ -194,6 +274,7 @@ public class Run {
 		
 		
 		
+		//CSVReader reader = new CSVReader(new FileReader("/home/sbs0457/workspace2/enhance12/term_resources/category_mainterm_synonymterm-task-non-specific_structure_term_training_v2.csv"));
 		CSVReader reader = new CSVReader(new FileReader("/home/sbs0457/git/enhance/Gordon_complexity_term_review/category_mainterm_synonymterm-task-Gordon_complexity.csv"));
 		List<String[]> lines = reader.readAll();
 		int i=0;
@@ -258,27 +339,37 @@ public class Run {
 		});*/
 
 		CSVKnowsSynonyms csvKnowsSynonyms = new CSVKnowsSynonyms("synonyms.csv", inflector);
-		RemoveNonSpecificBiologicalEntitiesByRelations transformer1 = new RemoveNonSpecificBiologicalEntitiesByRelations(
-				new CSVKnowsPartOf("part-of.csv", csvKnowsSynonyms, inflector), csvKnowsSynonyms,
-				tokenizer, new CollapseBiologicalEntityToName());
-		RemoveNonSpecificBiologicalEntitiesByBackwardConnectors transformer2 = new RemoveNonSpecificBiologicalEntitiesByBackwardConnectors(
-				new CSVKnowsPartOf("part-of.csv", csvKnowsSynonyms, inflector), csvKnowsSynonyms, 
-				tokenizer, new CollapseBiologicalEntityToName());
-		RemoveNonSpecificBiologicalEntitiesByForwardConnectors transformer3 = new RemoveNonSpecificBiologicalEntitiesByForwardConnectors(
-				new CSVKnowsPartOf("part-of.csv", csvKnowsSynonyms, inflector), csvKnowsSynonyms,
-				tokenizer, new CollapseBiologicalEntityToName());
+		
+		
+
+//		RemoveNonSpecificBiologicalEntitiesByRelations transformer1 = new RemoveNonSpecificBiologicalEntitiesByRelations(
+//				new CSVKnowsPartOf("thomas/part-of.csv", csvKnowsSynonyms, inflector), csvKnowsSynonyms,
+//				tokenizer, new CollapseBiologicalEntityToName());
+//			
+//		RemoveNonSpecificBiologicalEntitiesByBackwardConnectors transformer2 = new RemoveNonSpecificBiologicalEntitiesByBackwardConnectors(
+//				new CSVKnowsPartOf("thomas/part-of.csv", csvKnowsSynonyms, inflector), csvKnowsSynonyms, 
+//				tokenizer, new CollapseBiologicalEntityToName(),inflector);
+//		RemoveNonSpecificBiologicalEntitiesByForwardConnectors transformer3 = new RemoveNonSpecificBiologicalEntitiesByForwardConnectors(
+//				new CSVKnowsPartOf("thomas/part-of.csv", csvKnowsSynonyms, inflector), csvKnowsSynonyms,
+//				tokenizer, new CollapseBiologicalEntityToName());
+
 		RemoveNonSpecificBiologicalEntitiesByPassedParents transformer4 = new RemoveNonSpecificBiologicalEntitiesByPassedParents(
-				new CSVKnowsPartOf("part-of.csv", csvKnowsSynonyms, inflector), 
+				new CSVKnowsPartOf("dongfang/part-of.csv", csvKnowsSynonyms, inflector), 
 				csvKnowsSynonyms, tokenizer, new CollapseBiologicalEntityToName(), inflector);
+		
 		//RemoveNonSpecificBiologicalEntitiesByCollections removeByCollections = new RemoveNonSpecificBiologicalEntitiesByCollections(
 		//		new CSVKnowsPartOf(csvKnowsSynonyms, inflector), csvKnowsSynonyms, new CSVKnowsClassHierarchy(inflector), 
 		//		tokenizer, new CollapseBiologicalEntityToName(), inflector);
 		
 		run.addTransformer(new SimpleRemoveSynonyms(csvKnowsSynonyms));
-		run.addTransformer(transformer1);
-		run.addTransformer(transformer2);
-		run.addTransformer(transformer3);
+//		run.addTransformer(transformer1);
+//		run.addTransformer(transformer2);
+//		run.addTransformer(transformer3);
 		run.addTransformer(transformer4);
+		
+		
+		
+		
 		//run.addTransformer(removeByCollections);
 		
 		//run.addTransformer(transformer1);
@@ -322,8 +413,9 @@ public class Run {
 		
 		*/
 		
-		//run.run(new File("C:\\Users\\rodenhausen\\Desktop\\test-enhance\\selection_parsed2"), new File("C:\\Users\\rodenhausen\\Desktop\\test-enhance\\selection_parsed2_out_" + transformer.getClass().getSimpleName()));
-		run.run(new File("in3"), new File("out"));
+		run.run(new File("dongfang/in_mixedtaxon_reordered"), new File("dongfang/mixed_taxon_output_onlyonto"));
+
+		//run.run(new File("thomas/in3_reordered"), new File("thomas/out3_old_task_ontology_only"));
 	}
 	
 	private static Set<String> getWordSet(String regexString) {
@@ -395,6 +487,7 @@ public class Run {
 		
 		
 		List<Synonym> synonyms = new LinkedList<Synonym>();
+		//CSVReader reader = new CSVReader(new FileReader("/home/sbs0457/workspace2/enhance12/term_resources/category_mainterm_synonymterm-task-non-specific_structure_term_training_v2.csv"));
 		CSVReader reader = new CSVReader(new FileReader("/home/sbs0457/git/enhance/Gordon_complexity_term_review/category_mainterm_synonymterm-task-Gordon_complexity.csv"));
 		List<String[]> lines = reader.readAll();
 		int i=0;
@@ -404,6 +497,7 @@ public class Run {
 			hasSynonym.add(line[1]);
 		}	
 		
+		//reader = new CSVReader(new FileReader("/home/sbs0457/workspace2/enhance12/term_resources/category_term-task-non-specific_structure_term_training_v2.csv"));
 		reader = new CSVReader(new FileReader("/home/sbs0457/git/enhance/Gordon_complexity_term_review/category_term-task-Gordon_complexity.csv"));
 		lines = reader.readAll();
 		List<Decision> decisions = new LinkedList<Decision>();
@@ -462,6 +556,23 @@ public class Run {
 					glossary.addEntry(decision.getTerm().replaceAll("_",  "-"), decision.getCategory());  
 			}
 		}
+	}
+
+
+	@Override
+	public boolean transform(List<AbstractTransformer> transformers,Element statement, Element biologicalEntity,
+			List<Element> context, List<Element> wholeStatements) {
+		// TODO Auto-generated method stub
+		return true;
+
+		
+	}
+
+	@Override
+	public void transformAll(Element statement, Element biologicalEntity,
+			List<Element> wholeStatement) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

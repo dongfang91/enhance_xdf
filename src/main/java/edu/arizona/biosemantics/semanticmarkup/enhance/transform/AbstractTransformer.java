@@ -2,6 +2,7 @@ package edu.arizona.biosemantics.semanticmarkup.enhance.transform;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,8 @@ public abstract class AbstractTransformer {
 	protected XPathExpression<Element> characterPath = 
 			xpathFactory.compile("//description[@type='morphology']/statement/biological_entity/character", Filters.element(), null, 
 					Namespace.getNamespace("bio", "http://www.github.com/biosemantics"));
-	public abstract void transform(Document document);
+	public abstract boolean transform(List<AbstractTransformer> transformers,Element statement, Element biologicalEntity,List<Element> context,List<Element> wholeStatements);
+	public abstract void transformAll(Element statement, Element biologicalEntity,List<Element> wholeStatement);
 	
 	
 	protected List<Element> getRelationsInvolve(Element biologicalEntity, Document document) {
@@ -57,6 +59,19 @@ public abstract class AbstractTransformer {
 				result.add(relation);
 		}
 		return result;
+	}
+	
+	protected List<Integer> getStatementIdList(Element statement) {
+		List<Integer> statementIdList = new LinkedList<Integer>();
+		int i =0;
+		for (Element biologicalEntity: statement.getChildren("biological_entity")){
+			String id = biologicalEntity.getAttributeValue("id");
+			id = id.replaceAll("o", "");
+			if(!id.contains("_")){
+				statementIdList.add(i, Integer.valueOf(id));
+			}
+		}
+		return statementIdList;
 	}
 	
 	protected List<Element> getToRelations(Element biologicalEntity, Document document) {
@@ -76,6 +91,66 @@ public abstract class AbstractTransformer {
 		}
 		return null;
 	}
+	
+	protected Element getBiologicalEntityWithIdFromContext(List<Element> context, String id) {
+		for(Element statement : context) {
+			for (Element biologicalEntity: statement.getChildren("biological_entity")){
+				if(biologicalEntity.getAttributeValue("id").equals(id)) {
+					return biologicalEntity;
+				}
+			}
+		}
+		return null;
+	}
+	
+	protected boolean isBiologicalEntity(String previousTerm, List<Element> context) {
+		for (Element statement: context){
+			for (Element biologicalEntity: statement.getChildren("biological_entity")){
+				String originalName = biologicalEntity.getAttributeValue("name_original").trim();
+				if (previousTerm.equals(originalName))
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean isEntity(String token, List<Element> entityInput) {
+		for(Element entity : entityInput) {
+			String originalName = entity.getAttributeValue("name_original");
+			originalName = originalName == null ? "" : originalName.trim();
+			if(originalName.equals(token))
+				return true;
+		}
+		return false;
+	}
+	
+	protected Element getStatementWithIdFromContext(List<Element> context, String id) {
+		for(Element statement : context) {
+			for (Element biologicalEntity: statement.getChildren("biological_entity")){
+				if(biologicalEntity.getAttributeValue("id").equals(id)) {
+					return statement;
+				}
+			}
+		}
+		return null;
+	}
+	
+	protected int getOccurencesNum(Element currentBiologicalEntity, Element statement){
+		
+		String currentNameOriginal = currentBiologicalEntity.getAttributeValue("name_original");
+		String currentId = currentBiologicalEntity.getAttributeValue("id");
+
+		int k = 0;
+		for (Element biologicalEntity: statement.getChildren("biological_entity")){
+			if(biologicalEntity.getAttributeValue("name_original").equals(currentNameOriginal)) {
+				k++;
+				if(biologicalEntity.getAttributeValue("id").equals(currentId))
+					return k;
+			}
+		}
+		return -1;
+	}
+	
 	
 	protected void appendInferredConstraint(Element biologicalEntity, String append) {
 		String constraint = biologicalEntity.getAttributeValue("inferred_constraint");
